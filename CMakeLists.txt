@@ -5,4 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Brindusa_Dumitru_CA2 main.cpp
         Bug.h
-        Bug.cpp)
+        Bug.cpp
+        Board.h
+        Board.h
+        Crawler.cpp
+        Crawler.h
+        Hopper.cpp
+        Board.cpp)
