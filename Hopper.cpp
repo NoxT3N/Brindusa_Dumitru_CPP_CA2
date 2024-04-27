@@ -32,6 +32,7 @@ void Hopper::move() {
                 position.first = min(9,position.second+hopLength);
                 break;
         }
+        updatePath();
     }
 
 }

@@ -26,6 +26,7 @@ void Crawler::move() {
                 position.second++;
                 break;
         }
+        updatePath();
     }
     else {
         changeDirection();

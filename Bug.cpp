@@ -12,7 +12,7 @@ Bug::Bug(int id,pair<int,int> position,direction dir,int size){
     this->dir = dir;
     this->size = size;
     alive = true;
-
+    this->path.push_back(position);
 }
 
 
@@ -88,6 +88,10 @@ string Bug::get_string_status() {
     else {
         return"Dead";
     }
+}
+
+void Bug::updatePath() {
+    path.push_back(position);
 }
 
 

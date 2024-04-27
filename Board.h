@@ -24,6 +24,11 @@ public:
     void initializeBoard(const string&);
     void displayBugs();
     void findBug();
+    void tapBoard();
+    void displayHistory();
+    void displayCells();
+    void exit();
+    string posToString(pair<int,int>&);
 };
 
 

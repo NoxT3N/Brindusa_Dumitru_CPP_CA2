@@ -47,11 +47,13 @@ int main() {
                 board.displayBugs();
                 break;
             case 3:
-                findBug(bug_vector);
+                board.findBug();
                 break;
             case 4:
+                board.tapBoard();
                 break;
             case 5:
+                board.displayHistory();
                 break;
             case 6:
                 break;

@@ -26,6 +26,14 @@ Board::~Board() {
     }
 }
 
+string Board::posToString(pair<int, int> & position) {
+    int x = position.first;
+    int y = position.second;
+
+    return "("+std::to_string(x)+", "+std::to_string(y)+")";
+}
+
+
 void Board::initializeBoard(const string& filename) {
     ifstream fin(filename);
 
@@ -123,6 +131,35 @@ void Board::findBug() {
         }
     }
 }
+
+void Board::tapBoard() {
+    cout<<"You tapped the board"<<endl;
+    for(auto* bug : bug_vector) {
+        bug->move();
+    }
+}
+
+void Board::displayHistory() {
+    for(Bug* bug : bug_vector) {
+        string type;
+        if(auto crawler = dynamic_cast<Crawler*>(bug)) {
+            type = "Crawler";
+        }
+        else {
+            type = "Hopper";
+        }
+
+        printf("\n%d\t%s\tPath: ",bug->get_id(),type.c_str());
+        for(pair<int,int> pos : bug->get_path()) {
+            cout<< posToString(pos)<<", ";
+        }
+
+    }
+}
+
+
+
+
 
 
 
