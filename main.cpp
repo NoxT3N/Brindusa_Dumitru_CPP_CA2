@@ -13,6 +13,7 @@ using namespace std;
 
 void loadBugs(vector<Bug*>&);
 void displayBugs(const vector<Bug*>&);
+void findBug(const vector<Bug*>&);
 
 int main() {
     vector<Bug*> bug_vector;
@@ -42,6 +43,7 @@ int main() {
                 displayBugs(bug_vector);
                 break;
             case 3:
+                findBug(bug_vector);
                 break;
             case 4:
                 break;
@@ -97,10 +99,9 @@ void loadBugs(vector<Bug*>& bug_vector) {
                 cout << "error converting bug data: " << &e << endl;
             }
 
-
             if(bugType == "H") {
                 getline(iss, strHopLength);
-                int hopLength = stoi(strHopLength);
+                hopLength = stoi(strHopLength);
 
                 Bug* ptr = new Hopper(id,pair<int,int>(x,y),dir, size,hopLength);
 
@@ -126,9 +127,8 @@ void displayBugs(const vector<Bug*>& bug_vector) {
         printf("%-3s %-8s %-10s %-5s %-10s %-10s %-10s\n","ID","TYPE","LOCATION","SIZE","DIRECTION","HOPLENGTH","STATUS\n");
 
         for(const auto& bug: bug_vector) {
-            if(Hopper* hopper = dynamic_cast<Hopper*>(bug)) {
+            if(auto* hopper = dynamic_cast<Hopper*>(bug)) {
                 printf("%-4d %-8s %-10s %-5d %-10s %-5d %9s\n",hopper->get_id(),"Hopper",hopper->get_string_position().c_str(),hopper->get_size(),hopper->get_string_direction().c_str(),hopper->get_hop_length(),hopper->get_string_status().c_str());
-                delete hopper;
             }
             else {
                 printf("%-4d %-8s %-10s %-5d %-10s %15s\n",bug->get_id(),"Crawler",bug->get_string_position().c_str(),bug->get_size(),bug->get_string_direction().c_str(),bug->get_string_status().c_str());
@@ -138,6 +138,31 @@ void displayBugs(const vector<Bug*>& bug_vector) {
     else {
         cout << "There are currently no bugs on board" << endl;
     }
+}
+
+void findBug(const vector<Bug*>& bug_vector) {
+    cout << "Enter bug ID: " << endl;
+    int bugID;
+    cin >> bugID;
+
+    for(int i = 0; i < bug_vector.size(); i++) {
+        auto* bug = bug_vector[i];
+
+        if(bug->get_id()==bugID) {
+            printf("%-3s %-8s %-10s %-5s %-10s %-10s %-10s\n","ID","TYPE","LOCATION","SIZE","DIRECTION","HOPLENGTH","STATUS\n");
+            if(auto* hopper = dynamic_cast<Hopper*>(bug)) {
+                printf("%-4d %-8s %-10s %-5d %-10s %-5d %9s\n",hopper->get_id(),"Hopper",hopper->get_string_position().c_str(),hopper->get_size(),hopper->get_string_direction().c_str(),hopper->get_hop_length(),hopper->get_string_status().c_str());
+            }
+            else {
+                printf("%-4d %-8s %-10s %-5d %-10s %15s\n",bug->get_id(),"Crawler",bug->get_string_position().c_str(),bug->get_size(),bug->get_string_direction().c_str(),bug->get_string_status().c_str());
+            }
+            break;
+        }
+        if(i+1 == bug_vector.size()) {
+            cout << "Bug " << bugID << " not found";
+        }
+    }
+
 }
 
 
