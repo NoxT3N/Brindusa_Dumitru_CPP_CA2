@@ -54,14 +54,14 @@ void Bug::changeDirection() {
     }
 }
 
-string Bug::printPosition() {
+string Bug::get_string_position() {
     int x = position.first;
     int y = position.second;
 
     return "("+std::to_string(x)+", "+std::to_string(y)+")";
 }
 
-string Bug::printDirection() {
+string Bug::get_string_direction() {
     string strDir;
 
     switch(dir) {
@@ -80,6 +80,16 @@ string Bug::printDirection() {
     }
     return strDir;
 }
+
+string Bug::get_string_status() {
+    if(is_alive()) {
+        return "Alive";
+    }
+    else {
+        return"Dead";
+    }
+}
+
 
 
 Bug::~Bug(){}

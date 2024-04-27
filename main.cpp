@@ -87,8 +87,19 @@ void loadBugs(vector<Bug*>& bug_vector) {
 
             Bug::direction dir = dirMap[strDir];
 
+            try {
+                //https://cplusplus.com/reference/string/stoi/
+                id = stoi(strId);
+                x = stoi(strX);
+                y = stoi(strY);
+                size = stoi(strSize);
+            }catch (invalid_argument &e) {
+                cout << "error converting bug data: " << &e << endl;
+            }
+
+
             if(bugType == "H") {
-                getline(iss, strHopLength, ';');
+                getline(iss, strHopLength);
                 int hopLength = stoi(strHopLength);
 
                 Bug* ptr = new Hopper(id,pair<int,int>(x,y),dir, size,hopLength);
@@ -102,6 +113,7 @@ void loadBugs(vector<Bug*>& bug_vector) {
             }
         }
         cout<<"Board initialized"<<endl;
+        fin.close();
     }
     else {
         cout<<"Error opening file: "<< strerror(errno) <<endl;
@@ -109,24 +121,22 @@ void loadBugs(vector<Bug*>& bug_vector) {
 }
 
 void displayBugs(const vector<Bug*>& bug_vector) {
-    for(const auto& bug : bug_vector) {
-        cout << bug->get_id() << " ";
 
-        if(Crawler* crawler = dynamic_cast<Crawler*>(bug)) {
-            cout << "Crawler ";
-        }
-        else {
-            cout << "Hopper ";
-        }
-        cout << bug->printPosition() << " ";
-        cout << bug->printDirection() << " ";
-        cout << bug->is_alive() << " ";
-        cout << bug->get_size() << " "<<endl;
+    if(!bug_vector.empty()) {
+        printf("%-3s %-8s %-10s %-5s %-10s %-10s %-10s\n","ID","TYPE","LOCATION","SIZE","DIRECTION","HOPLENGTH","STATUS\n");
 
-        if(Hopper* hopper = dynamic_cast<Hopper*>(bug)) {
-            cout << hopper->get_hop_length();
+        for(const auto& bug: bug_vector) {
+            if(Hopper* hopper = dynamic_cast<Hopper*>(bug)) {
+                printf("%-4d %-8s %-10s %-5d %-10s %-5d %9s\n",hopper->get_id(),"Hopper",hopper->get_string_position().c_str(),hopper->get_size(),hopper->get_string_direction().c_str(),hopper->get_hop_length(),hopper->get_string_status().c_str());
+                delete hopper;
+            }
+            else {
+                printf("%-4d %-8s %-10s %-5d %-10s %15s\n",bug->get_id(),"Crawler",bug->get_string_position().c_str(),bug->get_size(),bug->get_string_direction().c_str(),bug->get_string_status().c_str());
+            }
         }
-
+    }
+    else {
+        cout << "There are currently no bugs on board" << endl;
     }
 }
 
