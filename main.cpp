@@ -56,6 +56,7 @@ int main() {
                 board.displayHistory();
                 break;
             case 6:
+                board.displayCells();
                 break;
             case 7:
                 break;

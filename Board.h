@@ -9,13 +9,16 @@
 #include <vector>
 
 struct Cell {
-    Bug* bug;
+    vector<Bug*> bugs;
+    bool isEmpty;
+
+    Cell() : isEmpty(true){}
 };
 
 class Board {
 private:
-    std::vector<std::vector<Cell>> cells;
-    std::vector<Bug*> bug_vector;
+    vector<Bug*> bug_vector;
+    Cell grid[10][10];
 
 public:
     explicit Board(vector<Bug*>&);

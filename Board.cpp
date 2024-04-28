@@ -16,7 +16,7 @@
 using namespace std;
 
 Board::Board(vector<Bug*>& bug_vector) {
-    this->cells;
+    this->grid;
     this->bug_vector = bug_vector;
 }
 
@@ -74,11 +74,15 @@ void Board::initializeBoard(const string& filename) {
                 Bug* ptr = new Hopper(id,pair<int,int>(x,y),dir, size,hopLength);
 
                 bug_vector.push_back(ptr);
+                grid[x][y].bugs.push_back(ptr);
+                grid[x][y].isEmpty = false;
             }
             else {
                 Bug* ptr = new Crawler(id,pair<int,int>(x,y), dir, size);
 
                 bug_vector.push_back(ptr);
+                grid[x][y].bugs.push_back(ptr);
+                grid[x][y].isEmpty = false;
             }
         }
         cout<<"Board initialized"<<endl;
@@ -97,7 +101,6 @@ string Board::getBugType(Bug *&bug) {
     return "Hopper";
 
 }
-
 
 void Board::displayAllBugs() {
 
@@ -164,6 +167,26 @@ void Board::exit() {
         cout << "Unable to open file: " << strerror(errno);
     }
 }
+
+void Board::displayCells() {
+    for(int i = 0; i < 10; i++) {
+        for(int j = 0; j < 10; j++) {
+            string occupants = " ";
+
+            if(grid[i][j].isEmpty) {
+                occupants = "empty";
+            }
+            else {
+                for(auto& bug : grid[i][j].bugs) {
+                    occupants += getBugType(bug) + ' '+ to_string(bug->get_id())+ ',';
+                }
+            }
+
+            cout<<"(" << i << "," << j << "): "<< occupants << endl;
+        }
+    }
+}
+
 
 
 
