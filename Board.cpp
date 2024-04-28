@@ -138,8 +138,20 @@ void Board::findBug() {
 void Board::tapBoard() {
     cout<<"You tapped the board"<<endl;
     for(auto* bug : bug_vector) {
+
+        auto [oldX, oldY] = bug->get_position(); //https://en.cppreference.com/w/cpp/language/structured_binding
         bug->move();
+        auto [newX, newY] = bug->get_position();
+
+        grid[oldX][oldY].bugs.clear();
+        grid[oldX][oldY].isEmpty = true;
+
+        grid[newX][newY].bugs.push_back(bug);
+        grid[newX][newY].isEmpty = false;
+
+
     }
+
 }
 
 void Board::displayHistory() {
@@ -171,14 +183,14 @@ void Board::exit() {
 void Board::displayCells() {
     for(int i = 0; i < 10; i++) {
         for(int j = 0; j < 10; j++) {
-            string occupants = " ";
+            string occupants;
 
             if(grid[i][j].isEmpty) {
                 occupants = "empty";
             }
             else {
                 for(auto& bug : grid[i][j].bugs) {
-                    occupants += getBugType(bug) + ' '+ to_string(bug->get_id())+ ',';
+                    occupants += getBugType(bug) + ' '+ to_string(bug->get_id())+ ", ";
                 }
             }
 

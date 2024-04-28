@@ -65,6 +65,10 @@ public:
     [[nodiscard]] list<pair<int, int>> get_path() const {
         return path;
     }
+
+    [[nodiscard]] pair<int, int> get_position() const {
+        return position;
+    }
 };
 
 
