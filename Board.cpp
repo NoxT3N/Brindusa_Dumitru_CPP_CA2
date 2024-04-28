@@ -3,9 +3,12 @@
 //
 
 #include "Board.h"
+
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <random>
 #include <sstream>
 #include <string.h>
 
@@ -159,14 +162,60 @@ void Board::tapBoard() {
                     if(grid[newX][newY].bugs[i]->get_size() > biggestBug->get_size()) {
                         biggestBug = grid[newX][newY].bugs[i];
                     }
-                }
+                    else if(grid[newX][newY].bugs[i]->get_size() == biggestBug->get_size()) {
+                        unsigned seed = chrono::steady_clock::now().time_since_epoch().count();
+                        mt19937 gen(seed);
+                        uniform_int_distribution<> dis(1,2);
 
-                for(auto* otherBug : grid[newX][newY].bugs) {
-                    if(otherBug != biggestBug) {
-                        biggestBug->grow(otherBug->get_size());
-                        otherBug->passAway();
+                        if(dis(gen) == 1) {
+                            biggestBug = grid[newX][newY].bugs[i];
+                        }
+
                     }
                 }
+
+                for (auto iter = grid[newX][newY].bugs.begin(); iter != grid[newX][newY].bugs.end();) {
+                    auto* otherBug = *iter;
+
+                    if (otherBug != biggestBug) {
+                        biggestBug->grow(otherBug->get_size());
+                        otherBug->passAway();
+                        iter = grid[newX][newY].bugs.erase(iter);
+                        //"Returns an iterator pointing to the new location of the element that followed the last element erased by the function call.
+                        //This returned iterator will be the end of the container if the operation erased the last element in the sequence."
+                        //https://www.shiksha.com/online-courses/articles/erasing-elements-from-a-vector-in-c/#:~:text=to%20by%20last.-,Return%20value%3A,last%20element%20in%20the%20sequence.
+                    }
+                    else {
+                        ++iter;
+                    }
+                }
+
+                int count = 0;
+                Bug* potentialWinner = nullptr;
+
+                //Last Bug Standing
+                for(int i = 0; i < 10; i++) {
+                    for(int j = 0; j < 10; j++) {
+                        if(!grid[i][j].isEmpty) {
+                            count++;
+                            if(count > 1) {
+                                break;
+                            }
+                                potentialWinner = grid[i][j].bugs.front();
+                        }
+                        if(count > 1) {
+                            potentialWinner = nullptr;
+                            break;
+                        }
+                    }
+                }
+
+                if(potentialWinner!= nullptr) {
+                    cout << "Last Bug Standing: "<< endl;
+                    potentialWinner->displayBug();
+                }
+
+
             }
         }
 
