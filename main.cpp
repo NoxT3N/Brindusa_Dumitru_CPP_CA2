@@ -44,7 +44,7 @@ int main() {
             break;
             case 2:
                 //displayBugs(bug_vector);
-                board.displayBugs();
+                board.displayAllBugs();
                 break;
             case 3:
                 board.findBug();

@@ -37,6 +37,11 @@ void Hopper::move() {
 
 }
 
+void Hopper::displayBug() {
+    printf("%-4d %-8s %-10s %-5d %-10s %-5d %9s\n",id,"Hopper",get_string_position().c_str(),size,get_string_direction().c_str(),hopLength,get_string_status().c_str());
+}
+
+
 Hopper::~Hopper() {
 }
 

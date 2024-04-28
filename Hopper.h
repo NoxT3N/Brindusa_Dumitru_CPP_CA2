@@ -15,7 +15,7 @@ public:
     Hopper(int id,pair<int,int> position,direction dir,int size,int hopLenght);
 
     void move() override;
-
+    void displayBug() override;
     ~Hopper() override;
 
     [[nodiscard]] int get_hop_length() const {

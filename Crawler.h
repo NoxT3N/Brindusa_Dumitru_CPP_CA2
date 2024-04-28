@@ -14,7 +14,7 @@ public:
     Crawler(int id,pair<int,int> position,direction dir,int size);
 
     void move() override;
-
+    void displayBug() override;
     ~Crawler() override;
 };
 

@@ -89,18 +89,23 @@ void Board::initializeBoard(const string& filename) {
     }
 }
 
-void Board::displayBugs() {
+string Board::getBugType(Bug *&bug) {
+    if(auto crawler = dynamic_cast<Crawler*>(bug)) {
+        return"Crawler";
+    }
+
+    return "Hopper";
+
+}
+
+
+void Board::displayAllBugs() {
 
     if(!bug_vector.empty()) {
         printf("%-3s %-8s %-10s %-5s %-10s %-10s %-10s\n","ID","TYPE","LOCATION","SIZE","DIRECTION","HOPLENGTH","STATUS\n");
 
         for(const auto& bug: bug_vector) {
-            if(auto* hopper = dynamic_cast<Hopper*>(bug)) {
-                printf("%-4d %-8s %-10s %-5d %-10s %-5d %9s\n",hopper->get_id(),"Hopper",hopper->get_string_position().c_str(),hopper->get_size(),hopper->get_string_direction().c_str(),hopper->get_hop_length(),hopper->get_string_status().c_str());
-            }
-            else {
-                printf("%-4d %-8s %-10s %-5d %-10s %15s\n",bug->get_id(),"Crawler",bug->get_string_position().c_str(),bug->get_size(),bug->get_string_direction().c_str(),bug->get_string_status().c_str());
-            }
+            bug->displayBug();
         }
     }
     else {
@@ -118,12 +123,7 @@ void Board::findBug() {
 
         if(bug->get_id()==bugID) {
             printf("%-3s %-8s %-10s %-5s %-10s %-10s %-10s\n","ID","TYPE","LOCATION","SIZE","DIRECTION","HOPLENGTH","STATUS\n");
-            if(auto* hopper = dynamic_cast<Hopper*>(bug)) {
-                printf("%-4d %-8s %-10s %-5d %-10s %-5d %9s\n",hopper->get_id(),"Hopper",hopper->get_string_position().c_str(),hopper->get_size(),hopper->get_string_direction().c_str(),hopper->get_hop_length(),hopper->get_string_status().c_str());
-            }
-            else {
-                printf("%-4d %-8s %-10s %-5d %-10s %15s\n",bug->get_id(),"Crawler",bug->get_string_position().c_str(),bug->get_size(),bug->get_string_direction().c_str(),bug->get_string_status().c_str());
-            }
+            bug->displayBug();
             break;
         }
         if(i+1 == bug_vector.size()) {
@@ -141,17 +141,10 @@ void Board::tapBoard() {
 
 void Board::displayHistory() {
     for(Bug* bug : bug_vector) {
-        string type;
-        if(auto crawler = dynamic_cast<Crawler*>(bug)) {
-            type = "Crawler";
-        }
-        else {
-            type = "Hopper";
-        }
+        string type = getBugType(bug);
+
         printf("%d\t%s\tPath: ",bug->get_id(),type.c_str());
-        // for(pair<int,int> pos : bug->get_path()) {
-        //     cout<< posToString(pos)<<", ";
-        // }
+
         cout<< bug->getLifeHistory() << endl;
 
     }
@@ -161,13 +154,7 @@ void Board::exit() {
     ofstream fout("bugs_life_history_date_time.out");
     if(fout.good()) {
         for(Bug* bug: bug_vector) {
-            string type;
-            if(auto crawler = dynamic_cast<Crawler*>(bug)) {
-                type = "Crawler";
-            }
-            else {
-                type = "Hopper";
-            }
+            string type = getBugType(bug);
             fout << bug->get_id() << " "<< type <<" "<< bug->getLifeHistory() << endl;
         }
         cout << "File has been written"<<endl;

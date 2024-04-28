@@ -14,16 +14,16 @@ void Crawler::move() {
     if(Crawler::isWayBlocked()!= true) {
         switch(dir) {
             case NORTH:
-                position.second--;
+                position.first--;
                 break;
             case SOUTH:
-                position.second++;
+                position.first++;
                 break;
             case WEST:
-                position.first--;
+                position.second--;
             break;
             case EAST:
-                position.first++;
+                position.second++;
                 break;
         }
         updatePath();
@@ -32,6 +32,10 @@ void Crawler::move() {
         changeDirection();
         move();
     }
+}
+
+void Crawler::displayBug() {
+    printf("%-4d %-8s %-10s %-5d %-10s %15s\n",id,"Crawler",get_string_position().c_str(),size,get_string_direction().c_str(),get_string_status().c_str());
 }
 
 

@@ -18,17 +18,18 @@ private:
     std::vector<Bug*> bug_vector;
 
 public:
-    Board(vector<Bug*>&);
+    explicit Board(vector<Bug*>&);
     ~Board();
 
     void initializeBoard(const string&);
-    void displayBugs();
+    void displayAllBugs();
     void findBug();
     void tapBoard();
     void displayHistory();
     void displayCells();
     void exit();
     string posToString(pair<int,int>&);
+    string getBugType(Bug *&);
 };
 
 

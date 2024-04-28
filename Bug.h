@@ -25,8 +25,10 @@ public:
     Bug() = default;
     Bug(int,pair<int,int>,direction,int);
 
+    virtual void displayBug() =0;
     virtual void move() =0;
     virtual ~Bug();
+
 
     bool isWayBlocked();
 
