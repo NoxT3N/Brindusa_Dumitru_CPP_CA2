@@ -98,7 +98,9 @@ string Bug::getLifeHistory() {
     string lifeHistory;
 
     for(pair<int,int> pos : path) {
-        lifeHistory += get_string_position()+", ";
+        //lifeHistory += get_string_position()+", ";
+        lifeHistory += "(" + std::to_string(pos.first) + ", " + std::to_string(pos.second) + "), ";
+
     }
 
     return lifeHistory;

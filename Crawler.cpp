@@ -14,16 +14,16 @@ void Crawler::move() {
     if(Crawler::isWayBlocked()!= true) {
         switch(dir) {
             case NORTH:
-                position.first--;
+                position.second--;
                 break;
             case SOUTH:
-                position.first++;
+                position.second++;
                 break;
             case WEST:
-                position.second--;
+                position.first--;
             break;
             case EAST:
-                position.second++;
+                position.first++;
                 break;
         }
         updatePath();
