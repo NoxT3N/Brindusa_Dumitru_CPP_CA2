@@ -106,6 +106,13 @@ string Bug::getLifeHistory() {
     return lifeHistory;
 }
 
+void Bug::grow(const int& increase) {
+    size += increase;
+}
+
+void Bug::passAway() {
+    alive = false;
+}
 
 
 Bug::~Bug(){}

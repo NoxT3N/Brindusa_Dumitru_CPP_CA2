@@ -29,10 +29,13 @@ public:
     virtual void move() =0;
     virtual ~Bug();
 
-
     bool isWayBlocked();
 
     void changeDirection();
+
+    void grow(const int&);
+
+    void passAway();
 
     string get_string_position();
 

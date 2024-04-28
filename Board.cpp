@@ -138,16 +138,39 @@ void Board::findBug() {
 void Board::tapBoard() {
     cout<<"You tapped the board"<<endl;
     for(auto* bug : bug_vector) {
+        if(bug->is_alive()) {
+            //moving the bug and updating the grid
+            auto [oldX, oldY] = bug->get_position(); //https://en.cppreference.com/w/cpp/language/structured_binding
+            bug->move();
+            auto [newX, newY] = bug->get_position();
 
-        auto [oldX, oldY] = bug->get_position(); //https://en.cppreference.com/w/cpp/language/structured_binding
-        bug->move();
-        auto [newX, newY] = bug->get_position();
+            grid[oldX][oldY].bugs.clear();
+            grid[oldX][oldY].isEmpty = true;
 
-        grid[oldX][oldY].bugs.clear();
-        grid[oldX][oldY].isEmpty = true;
+            grid[newX][newY].bugs.push_back(bug);
+            grid[newX][newY].isEmpty = false;
 
-        grid[newX][newY].bugs.push_back(bug);
-        grid[newX][newY].isEmpty = false;
+            // eat functionality
+
+            Bug* biggestBug = grid[newX][newY].bugs[0];
+
+            if(grid[newX][newY].bugs.size() > 1) {
+                for(int i = 1; i < grid[newX][newY].bugs.size(); i++ ) {
+                    if(grid[newX][newY].bugs[i]->get_size() > biggestBug->get_size()) {
+                        biggestBug = grid[newX][newY].bugs[i];
+                    }
+                }
+
+                for(auto* otherBug : grid[newX][newY].bugs) {
+                    if(otherBug != biggestBug) {
+                        biggestBug->grow(otherBug->get_size());
+                        otherBug->passAway();
+                    }
+                }
+            }
+        }
+
+
 
 
     }
