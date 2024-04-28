@@ -148,14 +148,36 @@ void Board::displayHistory() {
         else {
             type = "Hopper";
         }
-
-        printf("\n%d\t%s\tPath: ",bug->get_id(),type.c_str());
-        for(pair<int,int> pos : bug->get_path()) {
-            cout<< posToString(pos)<<", ";
-        }
+        printf("%d\t%s\tPath: ",bug->get_id(),type.c_str());
+        // for(pair<int,int> pos : bug->get_path()) {
+        //     cout<< posToString(pos)<<", ";
+        // }
+        cout<< bug->getLifeHistory() << endl;
 
     }
 }
+
+void Board::exit() {
+    ofstream fout("bugs_life_history_date_time.out");
+    if(fout.good()) {
+        for(Bug* bug: bug_vector) {
+            string type;
+            if(auto crawler = dynamic_cast<Crawler*>(bug)) {
+                type = "Crawler";
+            }
+            else {
+                type = "Hopper";
+            }
+            fout << bug->get_id() << " "<< type <<" "<< bug->getLifeHistory() << endl;
+        }
+        cout << "File has been written"<<endl;
+        fout.close();
+    }
+    else {
+        cout << "Unable to open file: " << strerror(errno);
+    }
+}
+
 
 
 

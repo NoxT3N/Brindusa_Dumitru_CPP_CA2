@@ -60,6 +60,7 @@ int main() {
             case 7:
                 break;
             case 8:
+                board.exit();
                 break;
             default:
                 cout << "Invalid command"<<endl;

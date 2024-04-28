@@ -94,6 +94,16 @@ void Bug::updatePath() {
     path.push_back(position);
 }
 
+string Bug::getLifeHistory() {
+    string lifeHistory;
+
+    for(pair<int,int> pos : path) {
+        lifeHistory += get_string_position()+", ";
+    }
+
+    return lifeHistory;
+}
+
 
 
 Bug::~Bug(){}
