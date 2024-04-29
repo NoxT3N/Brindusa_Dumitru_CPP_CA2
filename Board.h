@@ -19,6 +19,8 @@ class Board {
 private:
     vector<Bug*> bug_vector;
     Cell grid[10][10];
+    Bug* winner;
+    bool gameOver;
 
 public:
     explicit Board(vector<Bug*>&);
@@ -28,10 +30,12 @@ public:
     void displayAllBugs();
     void findBug();
     void tapBoard();
+    void runSimulation();
     void displayHistory();
     void displayCells();
+    void drawBoard();
     void exit();
-    string posToString(pair<int,int>&);
+
     string getBugType(Bug *&);
 };
 

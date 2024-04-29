@@ -29,7 +29,7 @@ void Hopper::move() {
                 position.second = max(0,position.second-hopLength);
                 break;
             case EAST:
-                position.first = min(9,position.second+hopLength);
+                position.second = min(9,position.second+hopLength);
                 break;
         }
         updatePath();

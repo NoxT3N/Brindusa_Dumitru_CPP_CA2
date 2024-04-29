@@ -6,11 +6,13 @@
 
 #include <chrono>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <random>
 #include <sstream>
 #include <string.h>
+#include <thread>
 
 #include "Bug.h"
 #include "Hopper.h"
@@ -21,19 +23,14 @@ using namespace std;
 Board::Board(vector<Bug*>& bug_vector) {
     this->grid;
     this->bug_vector = bug_vector;
+    this->gameOver;
+    this ->winner = nullptr;
 }
 
 Board::~Board() {
     for(Bug* bug: bug_vector) {
         delete bug;
     }
-}
-
-string Board::posToString(pair<int, int> & position) {
-    int x = position.first;
-    int y = position.second;
-
-    return "("+std::to_string(x)+", "+std::to_string(y)+")";
 }
 
 
@@ -190,38 +187,81 @@ void Board::tapBoard() {
                     }
                 }
 
-                int count = 0;
-                Bug* potentialWinner = nullptr;
+                //int count = 0;
 
                 //Last Bug Standing
                 for(int i = 0; i < 10; i++) {
                     for(int j = 0; j < 10; j++) {
+                        // if(!grid[i][j].isEmpty) {
+                        //     count++;
+                        //     if(count > 1) {
+                        //         break;
+                        //     }
+                        //         winner = grid[i][j].bugs.front();
+                        // }
+                        // if(count > 1) {
+                        //     winner = nullptr;
+                        //     break;
+                        // }
                         if(!grid[i][j].isEmpty) {
-                            count++;
-                            if(count > 1) {
-                                break;
+                            if(winner == nullptr) {
+                                winner = grid[i][j].bugs.front();
                             }
-                                potentialWinner = grid[i][j].bugs.front();
-                        }
-                        if(count > 1) {
-                            potentialWinner = nullptr;
-                            break;
+                            else {
+                                winner = nullptr;
+                                goto end_loop; https://en.cppreference.com/w/cpp/language/goto      //https://cplusplus.com/forum/beginner/50659/
+                            }
                         }
                     }
                 }
+                end_loop:
 
-                if(potentialWinner!= nullptr) {
+                if(winner != nullptr) {
                     cout << "Last Bug Standing: "<< endl;
-                    potentialWinner->displayBug();
+                    winner->displayBug();
+                    gameOver = true;
                 }
-
 
             }
         }
 
+    }
 
+}
 
+void Board::runSimulation() {
+    chrono::seconds interval( 1) ;
+    int tapCount = 1;
 
+    //start a timer https://stackoverflow.com/a/12883705
+    chrono::high_resolution_clock::time_point start(
+        chrono::high_resolution_clock::now());
+
+    while(!gameOver) {
+        cout << "Tap "<< tapCount << endl;
+        tapBoard();
+        //displayCells();
+        drawBoard();
+        this_thread::sleep_for(interval);
+        //https://cplusplus.com/forum/beginner/91449/
+        ++tapCount;
+    }
+
+    auto duration = chrono::duration_cast<chrono::seconds>(chrono::high_resolution_clock::now() - start);
+
+    ofstream fout("simulation_results.txt");
+    if(fout.good()) {
+        fout << "Winner: " << winner->get_id() <<endl;
+        fout << "Type: "<< getBugType(winner) <<endl;
+        fout << "Size:" << winner->get_size()<<endl;
+        fout << "Life History: "<< winner->getLifeHistory()<<endl;
+        fout << "Simulation Duration: " << to_string(duration.count()) << " seconds"<<endl;
+        fout << "Total taps: "<< tapCount <<endl;
+        cout << "Simulation Results have been written to file"<<endl;
+        fout.close();
+    }
+    else {
+        cout << "Unable to open file: " << strerror(errno);
     }
 
 }
@@ -265,11 +305,26 @@ void Board::displayCells() {
                     occupants += getBugType(bug) + ' '+ to_string(bug->get_id())+ ", ";
                 }
             }
-
             cout<<"(" << i << "," << j << "): "<< occupants << endl;
         }
     }
 }
+
+void Board::drawBoard() {
+    for(int i = 0; i < 10; i++) {
+        for(int j = 0; j < 10; j++) {
+            if(grid[i][j].isEmpty) {
+                cout << "-  ";
+            }
+            else {
+                string bugMark = getBugType(grid[i][j].bugs[0]).substr(0,1);
+                cout << bugMark << "  ";
+            }
+        }
+        cout << endl;
+    }
+}
+
 
 
 
